@@ -1,4 +1,4 @@
-import { readIntsFromFile } from "../util/util";
+import { util } from "@aocutil/util";
 import { partOne, partTwo } from "./day1";
 
 describe('Day 1', () => {
@@ -12,7 +12,7 @@ describe('Day 1', () => {
     });
 
     it.skip('part one real input', () => {
-        let nums = readIntsFromFile('./day1_input.txt')
+        let nums = util.readIntsFromFile('./day1_input.txt')
 
         console.log('*** Answer: ***');
         console.log(partOne(nums));

@@ -1,9 +1,14 @@
 {
     "compilerOptions": {
+        // "baseUrl": ".",
+        // "paths": {
+        //     "@aocutil/*": ["../../util/*"]
+        // },
         "outDir": "./dist",
         "sourceMap": true,
         "target": "ES6",
-        "skipLibCheck": true
+        "skipLibCheck": true,
+        "moduleResolution": "node",
     },
     "exclude": ["node_modules", "dist"]
 }
