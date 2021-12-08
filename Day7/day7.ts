@@ -12,11 +12,30 @@ export function partOne(input: number[]): number {
     return sum;
 }
 
+export function partTwo(input: number[]): number {
+    let average = Math.floor(input.reduce((sum, curr) => sum + curr) / input.length);
+    console.log('average:', average);
+
+    let sum = 0;
+    input.forEach(num => {
+        let mult = 1;
+        let diff = Math.abs(average - num);
+
+        while (diff > 0) {
+            sum += mult;
+            mult++;
+            diff--;
+        }
+    });
+
+    return sum;
+}
+
 function solve() {
     let input = readFileSync('./day7_input.txt', 'utf-8').split(',').map(val => parseInt(val));
 
-    console.log(partOne(input));
-    // console.log(partTwo(input));
+    console.log('Part one: ', partOne(input));
+    console.log('Part two: ', partTwo(input));
 }
 
 solve();

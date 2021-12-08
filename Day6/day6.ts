@@ -23,7 +23,7 @@ export function solvePartTwo(input: number[]): number {
         counts.push(input.filter(n => n == i).length);
     }
 
-    for (let day = 1; day <= 80; day++) {
+    for (let day = 1; day <= 256; day++) {
         let pop = counts.splice(0, 1)[0];
         counts[6] += pop;
         counts.push(pop);

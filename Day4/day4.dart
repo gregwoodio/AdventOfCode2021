@@ -1,3 +1,5 @@
+import 'dart:io';
+
 class BingoSquare {
   bool marked = false;
   int value;
@@ -20,10 +22,11 @@ class Game {
 }
 
 void main() async {
-  String input = await File("./day3_sample_input.txt").readAsString().split("\n");
+  String contents = await File("./day4_sample_input.txt").readAsString();
+  List<String> input = contents.split("\n");
 
   print("Part one: ${partOne(input)}");
-  print("Part two: ${partTwo(input)}")
+  print("Part two: ${partTwo(input)}");
 }
 
 int partOne(List<String> input) {
@@ -107,9 +110,9 @@ Game parseInput(List<String> input) {
 
       squares.add(squareRow);
     }
-    
+
     print(squares);
-    
+
     boards.add(new Board(squares));
   }
 
@@ -156,13 +159,13 @@ int checkWinPartTwo(List<Board> boards, int lastCalled) {
         }
       }
 
-      if (verticalWin || horizontalWin && board.length > 1) {
+      if (verticalWin || horizontalWin && board.squares.length > 1) {
         boards.removeAt(b);
         b--;
         break;
         // return getScore(board, lastCalled);
-      } else if (verticalWin || horizontalWin && board.length == 1) {
-          return getScore(board, lastCalled);
+      } else if (verticalWin || horizontalWin && board.squares.length == 1) {
+        return getScore(board, lastCalled);
       }
     }
   }
