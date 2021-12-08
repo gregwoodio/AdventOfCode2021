@@ -13,22 +13,30 @@ export function partOne(input: number[]): number {
 }
 
 export function partTwo(input: number[]): number {
-    let average = Math.floor(input.reduce((sum, curr) => sum + curr) / input.length);
-    console.log('average:', average);
+    let nums = Array.from({length: input.length}, (_, i) => i);
+    // let average = Math.floor(input.reduce((sum, curr) => sum + curr) / input.length);
+    // console.log('average:', average);
 
-    let sum = 0;
-    input.forEach(num => {
-        let mult = 1;
-        let diff = Math.abs(average - num);
+    let least = Number.MAX_SAFE_INTEGER; 
+    nums.forEach(average => {
+        let sum = 0;
+        input.forEach(num => {
+            let mult = 1;
+            let diff = Math.abs(average - num);
 
-        while (diff > 0) {
-            sum += mult;
-            mult++;
-            diff--;
+            while (diff > 0) {
+                sum += mult;
+                mult++;
+                diff--;
+            }
+        });
+
+        if (sum < least) {
+            least = sum;
         }
     });
 
-    return sum;
+    return least;
 }
 
 function solve() {
