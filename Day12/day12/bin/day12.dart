@@ -22,8 +22,8 @@ class Cave {
 }
 
 void main(List<String> arguments) {
-  var input = File('${Directory.current.path}\\bin\\day12_sample_input1.txt')
-      .readAsLinesSync();
+  var input =
+      File('${Directory.current.path}\\bin\\day12_input.txt').readAsLinesSync();
   print(solve(input));
   print(solve(input, true));
 }
@@ -76,7 +76,7 @@ List<String> traverse(Map<String, Cave> caves, Cave curr, List<String> paths,
   for (var cave in curr.paths) {
     if ((!isPartTwo &&
             cave.isSmallCave &&
-            currPath.contains('${cave.name},')) ||
+            !currPath.contains('${cave.name},')) ||
         (isPartTwo &&
             cave.isSmallCave &&
             canVisitSmallCave(cave.name, currPath)) ||
@@ -95,7 +95,7 @@ bool canVisitSmallCave(String caveName, String visitedCaves) {
 
   var caves = visitedCaves
       .split(',')
-      .where((cave) => cave != cave.toLowerCase()); // only consider small caves
+      .where((cave) => cave == cave.toLowerCase()); // only consider small caves
 
   Map<String, int> visitCounts = {};
 
@@ -107,7 +107,15 @@ bool canVisitSmallCave(String caveName, String visitedCaves) {
     }
   }
 
-  return (visitCounts.values.every((count) => count < 2));
+  if (visitCounts.values.every((count) => count < 2)) {
+    return true;
+  }
+
+  var visitedTwice = visitCounts.entries
+      .where((caveVisit) => caveVisit.value == 2)
+      .map((entry) => entry.key)
+      .toSet();
+  return visitedTwice.length <= 1 && !visitedTwice.contains(caveName);
 
   // var regex = RegExp("$caveName,");
   // var matches = regex.allMatches(visitedCaves);
