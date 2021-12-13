@@ -8,7 +8,7 @@ class Cave {
 
   Cave(this.name) {
     for (var ch in name.codeUnits) {
-      if (ch < 97 && ch > 122) {
+      if (ch < 97 || ch > 122) {
         isSmallCave = false;
         break;
       }
@@ -22,12 +22,13 @@ class Cave {
 }
 
 void main(List<String> arguments) {
-  var input = File("${Directory.current.path}\\bin\\day12_sample_input1.txt")
+  var input = File('${Directory.current.path}\\bin\\day12_sample_input1.txt')
       .readAsLinesSync();
-  print(partOne(input));
+  print(solve(input));
+  print(solve(input, true));
 }
 
-int partOne(List<String> input) {
+int solve(List<String> input, [bool isPartTwo = false]) {
   Map<String, Cave> caves = {};
 
   for (var line in input) {
@@ -53,24 +54,62 @@ int partOne(List<String> input) {
     cave2.paths.add(cave1);
   }
 
-  var start = caves["start"]!;
-  var paths = traverse(caves, start, []);
+  var start = caves['start']!;
+  var paths = traverse(caves, start, [], '', isPartTwo);
 
-  return -1;
+  return paths.length;
 }
 
-List<String> traverse(Map<String, Cave> caves, Cave curr, List<String> paths) {
-  paths.add(curr.name);
-  if (paths.length > 100) {
+List<String> traverse(Map<String, Cave> caves, Cave curr, List<String> paths,
+    String currPath, bool isPartTwo) {
+  if (currPath.isNotEmpty) {
+    currPath += ',';
+  }
+
+  currPath += curr.name;
+
+  if (curr.name == 'end') {
+    paths.add(currPath);
     return paths;
   }
+
   for (var cave in curr.paths) {
-    if (cave.isSmallCave && !cave.isVisited) {
-      cave.isVisited = true;
-      paths.addAll(traverse(caves, cave, paths));
-    } else if (!cave.isSmallCave) {
-      paths.addAll(traverse(caves, cave, paths));
+    if ((!isPartTwo &&
+            cave.isSmallCave &&
+            currPath.contains('${cave.name},')) ||
+        (isPartTwo &&
+            cave.isSmallCave &&
+            canVisitSmallCave(cave.name, currPath)) ||
+        !cave.isSmallCave) {
+      traverse(caves, cave, paths, currPath, isPartTwo);
     }
   }
+
   return paths;
+}
+
+bool canVisitSmallCave(String caveName, String visitedCaves) {
+  if (caveName == 'start') {
+    return false; // can't revisit start
+  }
+
+  var caves = visitedCaves
+      .split(',')
+      .where((cave) => cave != cave.toLowerCase()); // only consider small caves
+
+  Map<String, int> visitCounts = {};
+
+  for (var cave in caves) {
+    if (visitCounts.containsKey(cave)) {
+      visitCounts[cave] = visitCounts[cave]! + 1;
+    } else {
+      visitCounts[cave] = 1;
+    }
+  }
+
+  return (visitCounts.values.every((count) => count < 2));
+
+  // var regex = RegExp("$caveName,");
+  // var matches = regex.allMatches(visitedCaves);
+  // return matches.length;
 }
